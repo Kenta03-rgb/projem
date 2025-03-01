@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Modern Satış Ekranı</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="satisIslemleriStil.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sol Panel: Barkod Girişi ve Ürün Listesi -->
+    <div class="left-panel">
+      <div class="barcode-input">
+        <label for="barcode">Barkod Oku/Gir:</label>
+        <input type="text" id="barcode" placeholder="Barkodu okut veya elle gir...">
+      </div>
+      <div class="product-list">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Ürün Adı</th>
+              <th>Miktar</th>
+              <th>Birim Fiyat</th>
+              <th>Toplam</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Ürünler buraya eklenecek -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sağ Panel: Kontroller, Toplam Tutar Ekranı ve Tuş Takımı -->
+    <div class="right-panel">
+      <div class="top-controls">
+        <button id="changeUser">Kullanıcı Değiştir</button>
+        <button id="exit">Çıkış</button>
+      </div>
+      <div class="middle-controls">
+        <button id="completeSale">Satışı Tamamla</button>
+        <button id="holdCustomer">Müşteri Beklet</button>
+        <button id="lastSale">Son Satışı Getir</button>
+      </div>
+      <div class="total-display">
+        <span>Toplam Tutar: <strong id="totalAmount">0.00 TL</strong></span>
+      </div>
+      <div class="keypad">
+        <button class="key">7</button>
+        <button class="key">8</button>
+        <button class="key">9</button>
+        <button class="key">4</button>
+        <button class="key">5</button>
+        <button class="key">6</button>
+        <button class="key">1</button>
+        <button class="key">2</button>
+        <button class="key">3</button>
+        <button class="key">0</button>
+        <button class="key">.</button>
+        <button class="key enter">Enter</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

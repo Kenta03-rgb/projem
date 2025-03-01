@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Barkod Otomasyon - Ana Ekran</title>
+  <link rel="stylesheet" href="anaEkranStil.css">
+</head>
+<body>
+  <!-- Arkaplan ve içerik için ana kapsayıcı -->
+  <div class="anaEkranKapsayici">
+    
+    <!-- Sol kısım (örnek: tarih, saat, bildirimler, logo) -->
+    <div class="solPanel">
+      <div class="tarihSaatBolumu">
+        <div id="saat">00:00</div>
+        <div id="tarih">27 Şubat 2025 - Perşembe</div>
+        <div id="havaDurumu">Hava: Güneşli</div>
+        <div id="bildirimler">
+          <p>Bildirim 1: Yeni sipariş var!</p>
+          <p>Bildirim 2: Güncelleme mevcut.</p>
+        </div>
+      </div>
+      <div class="logoBolumu">
+        <img src="resimler/logo.png" alt="Barkod Otomasyon Logosu">
+      </div>
+    </div>
+    
+    <!-- Sağ (ana) kısım (modüllerin olduğu yer) -->
+    <div class="sagPanel">
+      <!-- Üst çubuk: Sunucu, veritabanı bağlantı durumları, kullanıcı adı vs. -->
+      <div class="ustCubuk">
+        <span id="sunucuDurumu" class="offline">Sunucu: Kapalı</span>
+        <span id="veritabaniDurumu" class="offline">Veritabanı: Kapalı</span>
+        <span class="kullaniciAdi">Kullanıcı: admin</span>
+      </div>
+      
+      <!-- Modüller (ikon + yazı) -->
+      <div class="modulKapsayici">
+        <!-- 1) Satış İşlemleri -->
+        <div class="modulKutu" onclick="window.location.href='satisIslemleri.html'">
+          <div class="ikon">&#128179;</div>
+          <span>Satış İşlemleri</span>
+        </div>
+        
+        <!-- 2) Stok Takibi -->
+        <div class="modulKutu" onclick="window.location.href='stokTakibi.html'">
+          <div class="ikon">&#128190;</div>
+          <span>Stok Takibi</span>
+        </div>
+        
+        <!-- 3) Raporlar -->
+        <div class="modulKutu" onclick="window.location.href='raporlar.html'">
+          <div class="ikon">&#128200;</div>
+          <span>Raporlar</span>
+        </div>
+        
+        <!-- 4) Terazi Ayarları -->
+        <div class="modulKutu" onclick="window.location.href='teraziAyarlar.html'">
+          <div class="ikon">&#9878;</div>
+          <span>Terazi Ayarları</span>
+        </div>
+        
+        <!-- 5) Fiyat Güncelle -->
+        <div class="modulKutu" onclick="window.location.href='fiyatGuncelle.html'">
+          <div class="ikon">&#128197;</div>
+          <span>Fiyat Güncelle</span>
+        </div>
+        
+        <!-- 6) Ayarlar -->
+        <div class="modulKutu" onclick="window.location.href='ayarlar.html'">
+          <div class="ikon">&#9881;</div>
+          <span>Ayarlar</span>
+        </div>
+        
+        <!-- 7) Müşteri Takibi -->
+        <div class="modulKutu" onclick="window.location.href='musteriTakibi.html'">
+          <div class="ikon">&#128101;</div>
+          <span>Müşteri Takibi</span>
+        </div>
+        
+        <!-- 8) Kullanıcı Yönetimi -->
+        <div class="modulKutu" onclick="window.location.href='kullaniciYonetimi.html'">
+          <div class="ikon">&#128100;</div>
+          <span>Kullanıcı Yönetimi</span>
+        </div>
+        
+        <!-- 9) Kampanya -->
+        <div class="modulKutu" onclick="window.location.href='kampanya.html'">
+          <div class="ikon">&#128176;</div>
+          <span>Kampanya</span>
+        </div>
+        
+        <!-- 10) Yedekleme -->
+        <div class="modulKutu" onclick="window.location.href='yedekleme.html'">
+          <div class="ikon">&#128190;</div>
+          <span>Yedekleme</span>
+        </div>
+      </div>
+      
+      <!-- Alt çubuk: Çıkış veya diğer butonlar -->
+      <div class="altCubuk">
+        <button onclick="window.close()">Çıkış</button>
+      </div>
+    </div>
+    
+  </div>
+  
+  <script>
+    // 1) Saat ve Tarih Güncelleme
+    function saatTarihGuncelle() {
+      const simdi = new Date();
+      
+      // Saat formatlama (HH:MM)
+      let hh = simdi.getHours();
+      let mm = simdi.getMinutes();
+      if(hh < 10) hh = '0' + hh;
+      if(mm < 10) mm = '0' + mm;
+      document.getElementById('saat').textContent = hh + ':' + mm;
+      
+      // Tarih formatlama (örnek: 29 Ocak 2025 - Çarşamba)
+      const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+      const aylar = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+      let gunIndex = simdi.getDay();
+      let ayIndex = simdi.getMonth();
+      let gun = simdi.getDate();
+      let yil = simdi.getFullYear();
+      let gunAdi = gunler[gunIndex];
+      let ayAdi = aylar[ayIndex];
+      
+      document.getElementById('tarih').textContent = `${gun} ${ayAdi} ${yil} - ${gunAdi}`;
+    }
+    setInterval(saatTarihGuncelle, 1000);
+    saatTarihGuncelle(); // İlk yüklemede hemen çalıştır
+    
+    // 2) Sunucu ve Veritabanı Bağlantı Kontrolü (isteğe bağlı)
+    function baglantiKontrol() {
+      // localhost:3000/ping endpointini kontrol ediyoruz
+      fetch('http://localhost:3000/ping') 
+        .then((cevap) => {
+          if(cevap.ok) {
+            document.getElementById('sunucuDurumu').textContent = 'Sunucu: Bağlı';
+            document.getElementById('sunucuDurumu').classList.remove('offline');
+            document.getElementById('sunucuDurumu').classList.add('online');
+            
+            document.getElementById('veritabaniDurumu').textContent = 'Veritabanı: Bağlı';
+            document.getElementById('veritabaniDurumu').classList.remove('offline');
+            document.getElementById('veritabaniDurumu').classList.add('online');
+          } else {
+            sunucuKapali();
+          }
+        })
+        .catch((err) => {
+          console.error('Sunucuya erişilemedi:', err);
+          sunucuKapali();
+        });
+    }
+    
+    function sunucuKapali() {
+      document.getElementById('sunucuDurumu').textContent = 'Sunucu: Kapalı';
+      document.getElementById('sunucuDurumu').classList.remove('online');
+      document.getElementById('sunucuDurumu').classList.add('offline');
+      
+      document.getElementById('veritabaniDurumu').textContent = 'Veritabanı: Kapalı';
+      document.getElementById('veritabaniDurumu').classList.remove('online');
+      document.getElementById('veritabaniDurumu').classList.add('offline');
+    }
+    
+    setInterval(baglantiKontrol, 5000);
+    baglantiKontrol();
+  </script>
+</body>
+</html>

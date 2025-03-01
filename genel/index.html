@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Barkod Otomasyon - Giriş</title>
+  <link rel="stylesheet" href="girisStil.css">
+</head>
+<body>
+  <div class="girisKapsayici">
+    <!-- Sol Panel: Logo ve Karşılama Mesajı -->
+    <div class="solPanel">
+      <div class="solPanelIcerik">
+        <img src="resimler/logo.png" alt="Barkod Otomasyon Logosu" class="logo">
+        <h1>Hoş Geldiniz</h1>
+        <p>Barkod Otomasyon Sistemi</p>
+      </div>
+    </div>
+    
+    <!-- Sağ Panel: Giriş Formu -->
+    <div class="sagPanel">
+      <div class="girisFormuKutu">
+        <h2>Kullanıcı Girişi</h2>
+        <form id="girisFormu">
+          <label for="kullaniciAdi">Kullanıcı Adı</label>
+          <input type="text" id="kullaniciAdi" name="kullaniciAdi" required>
+          
+          <label for="sifre">Şifre</label>
+          <input type="password" id="sifre" name="sifre" required>
+          
+          <label for="lisans">Lisans Anahtarı</label>
+          <input type="text" id="lisans" name="lisans" required>
+          
+          <!-- "Beni Hatırla" Satırı -->
+          <div class="hatirlaSatiri">
+            <label class="hatirlaLabel">
+              <input type="checkbox" id="beniHatirla">
+              <span>Beni Hatırla</span>
+            </label>
+          </div>
+          
+          <!-- Buton Satırı -->
+          <div class="butonSatiri">
+            <button type="submit" id="girisYapBtn">Giriş Yap</button>
+            <button type="button" id="acKlavyeBtn">Ekran Klavyesi Aç</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sayfa yüklendiğinde kayıtlı bilgileri getir
+    window.addEventListener('load', function() {
+      const savedUser = localStorage.getItem('kullaniciAdi');
+      const savedPass = localStorage.getItem('sifre');
+      const savedLisans = localStorage.getItem('lisans');
+      if (savedUser && savedPass && savedLisans) {
+        document.getElementById('kullaniciAdi').value = savedUser;
+        document.getElementById('sifre').value = savedPass;
+        document.getElementById('lisans').value = savedLisans;
+        document.getElementById('beniHatirla').checked = true;
+      }
+    });
+    
+    // Giriş formu gönderildiğinde
+    document.getElementById('girisFormu').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const kullaniciAdi = document.getElementById('kullaniciAdi').value;
+      const sifre = document.getElementById('sifre').value;
+      const lisans = document.getElementById('lisans').value;
+      
+      fetch('http://localhost:3000/api/dogrula', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kullaniciAdi, sifre, lisans })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.basari) {
+          alert('Giriş başarılı!');
+          // "Beni Hatırla" seçiliyse bilgileri kaydet, değilse temizle
+          if(document.getElementById('beniHatirla').checked) {
+            localStorage.setItem('kullaniciAdi', kullaniciAdi);
+            localStorage.setItem('sifre', sifre);
+            localStorage.setItem('lisans', lisans);
+          } else {
+            localStorage.removeItem('kullaniciAdi');
+            localStorage.removeItem('sifre');
+            localStorage.removeItem('lisans');
+          }
+          window.location.href = "anaEkran.html";
+        } else {
+          alert('Giriş başarısız: ' + data.mesaj);
+        }
+      })
+      .catch(err => {
+        console.error('Hata:', err);
+        alert('Bağlantı hatası. Sunucuya ulaşılamıyor.');
+      });
+    });
+    
+    // Ekran klavyesi açma butonu (Electron ortamında, Windows'ta çalışır)
+    document.getElementById('acKlavyeBtn').addEventListener('click', function() {
+      if (typeof require !== 'undefined') {
+        const { exec } = require('child_process');
+        exec('osk', (error, stdout, stderr) => {
+          if (error) {
+            console.error('Ekran klavyesi açma hatası:', error);
+          }
+        });
+      } else {
+        alert('Ekran klavyesi sadece Electron ortamında çalışır.');
+      }
+    });
+  </script>
+</body>
+</html>
